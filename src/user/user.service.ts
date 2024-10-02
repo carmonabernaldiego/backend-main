@@ -21,11 +21,17 @@ export class UserService {
     });
   }
 
-  findOneById(user_id: number): Promise<User> {
-    return this.userRepository.findOne({
+  async findOneById(user_id: number): Promise<User> {
+    const user = await this.userRepository.findOne({
       where: { user_id },
       select: ['user_id', 'email', 'username', 'userlastname', 'role'],
     });
+
+    if (!user) {
+      throw new NotFoundException(`User with ID ${user_id} not found`);
+    }
+
+    return user;
   }
 
   findOneByEmail(email: string): Promise<User> {

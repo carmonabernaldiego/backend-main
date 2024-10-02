@@ -29,7 +29,6 @@ export class PrinterService {
   }
 
   async findAllBySearch(search: string): Promise<Printer[]> {
-    // Usa QueryBuilder para buscar en todos los campos relevantes con LIKE
     const printers = await this.printerRepository
       .createQueryBuilder('printer')
       .where('printer.printer_name LIKE :search', { search: `%${search}%` })
@@ -40,7 +39,7 @@ export class PrinterService {
       .orWhere('printer.serial_number LIKE :search', { search: `%${search}%` })
       .getMany();
 
-    if (printers.length === 0) {
+    if (!printers || printers.length === 0) {
       throw new NotFoundException(
         `No printers found matching the search term "${search}"`,
       );

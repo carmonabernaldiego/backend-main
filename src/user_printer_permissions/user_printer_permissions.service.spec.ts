@@ -104,13 +104,17 @@ describe('UserPrinterPermissionsService', () => {
   describe('update', () => {
     it('should update and return the permission', async () => {
       const existingPermission = new UserPrinterPermission();
+      existingPermission.permission_id = 1; // Asegúrate de que esto esté configurado si es necesario
+
       const updatedPermission = new UserPrinterPermission();
+      updatedPermission.permission_id = 1; // Debe tener la misma ID para que sea el mismo objeto
 
       jest.spyOn(service, 'findOneById').mockResolvedValue(existingPermission);
       jest.spyOn(repository, 'update').mockResolvedValue(undefined);
       jest.spyOn(repository, 'findOne').mockResolvedValue(updatedPermission);
 
-      expect(await service.update(1, updatedPermission)).toBe(
+      // Ahora verificamos que el objeto devuelto es el mismo que el esperado
+      expect(await service.update(1, updatedPermission)).toStrictEqual(
         updatedPermission,
       );
     });

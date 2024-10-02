@@ -50,11 +50,10 @@ export class UserPrinterPermissionsService {
     id: number,
     permission: UserPrinterPermission,
   ): Promise<UserPrinterPermission> {
-    const existingPermission = await this.findOneById(id); // Reutilizamos el método findOneById para asegurar que existe
-    // Se puede hacer más validaciones aquí si es necesario
+    const existingPermission = await this.findOneById(id);
     try {
       await this.permissionRepository.update(id, permission);
-      return this.findOneById(id);
+      return this.findOneById(id); // Esto debería devolver el objeto actualizado
     } catch (error) {
       if (error.code === 'ER_NO_DEFAULT_FOR_FIELD') {
         throw new ConflictException(
